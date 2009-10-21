@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
+import os
+
 import Pyro.core
-import sys
 
 import pwm
 import adc
@@ -44,7 +45,8 @@ class Remote(Pyro.core.ObjBase):
 
 if __name__ == "__main__":
     Pyro.core.initServer()
-    daemon=Pyro.core.Daemon(host=sys.argv[1])
+    #daemon=Pyro.core.Daemon(host=sys.argv[1])
+    daemon=Pyro.core.Daemon(host=os.uname()[1])
     uri=daemon.connect(Remote(),"remote")
     
     print "The daemon runs on port:",daemon.port
