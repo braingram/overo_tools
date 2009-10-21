@@ -8,17 +8,16 @@ remote = Pyro.core.getProxyForURI("PYRO://"+sys.argv[1])
 
 print remote.hello()
 
+# test pwm
 duty = 0.5
 print "setting pwm to duty:",duty,"... ",
-#ratRemote.pwm.set_duty(duty)
-remote.pwm.enable()
-remote.pwm.disable()
+ratRemote.pwm_set_duty(duty)
 print "done"
 
 print "enabling pwm... "
-remote.pwm.enable()
+remote.pwm_enable()
 print "done"
 
 print "reading adc... "
-v = remote.adc.read()
+v = remote.adc_read()
 print "read:", v

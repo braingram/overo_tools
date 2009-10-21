@@ -5,7 +5,7 @@ import time
 import pydevmem
 
 class OmapPwm:
-    availablePins = [8,9,10,11]
+    VALID_PINS = [8,9,10,11]
     #
     # TODO these are probably better to do as base + offsets
     #
@@ -91,16 +91,16 @@ class OmapPwm:
                      8: 0x4903e028 }
     #
     #
-    def __init__(self, pin=11):
-        if not pin in self.availablePins:
-            raise Exception("invalid OmapPwm pin: "+str(pin)+" not in "+str(self.availablePins))
+    def __init__(self, pin=10):
+        if not pin in self.VALID_PINS:
+            raise Exception("invalid OmapPwm pin: "+str(pin)+" not in "+str(self.VALID_PINS))
         self.pin = pin
         # enable 32k clock for pin
         pydevmem.write(self.CLKSEL_ADDR[pin], 0xffffffff, self.CLKSEL_MASK[pin])
         # enable interface clock (ICLK)
-        pydevmem.write(self.ICLK_ADDR[pin], 0xffffffff, self.ICLK_MASK[pin])
+        pydevmem.write(self.ICLKEN_ADDR[pin], 0xffffffff, self.ICLKEN_MASK[pin])
         # enable functional clock (FCLK)
-        pydevmem.write(self.FCLK_ADDR[pin], 0xffffffff, self.FCLK_MASK[pin])
+        pydevmem.write(self.FCLKEN_ADDR[pin], 0xffffffff, self.FCLKEN_MASK[pin])
         # pause to allow changes to settle
         time.sleep(1)
         # disable timer (TCLR)
@@ -118,18 +118,12 @@ class OmapPwm:
         pydevmem.write(self.TLDR_ADDR[self.pin], value)
     def set_match(self, value):
         pydevmem.write(self.TMAR_ADDR[self.pin], value)
-    def set_on_time(self, on):
-        pass
-    def set_off_time(self, off):
-        pass
-    def set_duty(self, duty):
-        pass
 
 class TpsPwm:
-    availablePins = [0,1]
+    VALID_PINS = [0,1]
     def __init__(self, pin=0):
-        if not pin in self.availablePins:
-            raise Exception("invalid TpsPwm pin: "+str(pin)+" not in "+str(self.availablePins))
+        if not pin in self.VALID_PINS:
+            raise Exception("invalid TpsPwm pin: "+str(pin)+" not in "+str(self.VALID_PINS))
         # mux pin for pwm0 (0x04 for pwm0, 0x30 for pwm1, 0x34 for both)
         #i2cset -f -y 1 0x49 0x92 0x04
         # turn on pwm0 clock and enable pwm0 (0x05 for pwm0, 0x0a for pwm1, 0x0f for both)

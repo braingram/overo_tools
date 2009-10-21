@@ -3,7 +3,7 @@
 import pydevmem
 
 class Gpio:
-    availablePins = [144, 145, 146, 147]
+    VALID_PINS = [144, 145, 146, 147]
     # TODO make these uppercase
     # pin muxing register information
     MUX_ADDR = {    144: 0x48002174,
@@ -38,9 +38,9 @@ class Gpio:
                     145: 0x4905603c,
                     146: 0x4905603c,
                     147: 0x4905603c }
-    def __init__(self, pin=145):
-        if not pin in self.availablePins:
-            raise Exception("Gpio: invalid pin:"+str(pin)+" not in "+str(self.availablePins))
+    def __init__(self, pin=146):
+        if not pin in self.VALID_PINS:
+            raise Exception("Gpio: invalid pin:"+str(pin)+" not in "+str(self.VALID_PINS))
         self.pin = pin
         # mux pin, attaching gpio to the pin
         pydevmem.write(self.MUX_ADDR[pin], self.MUX_VAL[pin], self.MUX_MASK[pin])

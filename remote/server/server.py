@@ -18,13 +18,25 @@ class Remote(Pyro.core.ObjBase):
     def pwm_enable(self):
         self.pwm.enable()
     def pwm_disable(self):
-        self.pwm.diable()
+        self.pwm.disable()
+    def pwm_set_load(self, value):
+        self.pwm.set_load(value)
+    def pwm_set_match(self, value):
+        self.pwm.set_match(value)
     def pwm_set_duty(self, duty):
         self.pwm.set_duty(duty)
     # adc
     def adc_read(self):
         return self.adc.read()
+    def adc_set_pin(self, pin, average):
+        self.adc.set_pin(pin, average)
+    def adc_raw_read(self):
+        return self.adc.raw_read()
+    def adc_read_pin(pin, average):
+        return self.adc.read_pin(pin, average)
     # gpio
+    def gpio_set_level(self, level):
+        self.gpio.set_level(level)
     def gpio_set_high(self):
         self.gpio.set_high()
     def gpio_set_low(self):
