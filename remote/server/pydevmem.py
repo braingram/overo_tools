@@ -2,9 +2,16 @@
 
 import mmap, os
 
-# there seems to be a problem with this (and devmem2) where if a address
-# is too close to a multiple of the page size (say 4095) than a portion of the
-# data is blank in this case, and random for devmem2
+# the gp_timer registers (accessed via /dev/mem) should only be accessed using 16/32 bit read/writes
+# accessing these registers with 8 bit read/writes can result in corruption of the registers. so...
+# do not use: mmap.read_byte() (as this uses 8 bit access)
+# I believe that mmap.read(4) would do the trick, and digging through the python source I've ended up at
+#   (in stringobject.c[PyString_FromStringAndSize] Py_MEMCPY(op->ob_sval, str, size)
+# If I start running into errors, than look at using the buffer protcol instead like so:
+#   f = open(/dev/mem)
+#   m = mmap(f)
+#   b = buffer(m)
+#   b[start:end] = newRegisterValue
 
 MAP_MASK = mmap.PAGESIZE - 1
 
