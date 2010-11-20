@@ -2,19 +2,21 @@
 
 import os
 
-import Pyro.core
+import Pyro.core # Pyro 3.8.1
 
 import pwm
 import adc
 import gpio
 
-class Remote(Pyro.core.ObjBase):
+class Remote(Pyro.core.ObjBase): 
     """Creates a pretty useless class that just contains an adc (self.adc) and pwm (self.pwm)"""
     def __init__(self):
         Pyro.core.ObjBase.__init__(self)
         self.adc = adc.Adc()
         self.pwm = pwm.OmapPwm()
         self.gpio = gpio.Gpio()
+    def ping(self):
+        return 1
     # pwm
     def pwm_enable(self):
         self.pwm.enable()

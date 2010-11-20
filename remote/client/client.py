@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 
-import Pyro.core
+import Pyro.core # Pyro 3.8.1
 import sys
 
 # you have to change the URI below to match your own host/port.
 remote = Pyro.core.getProxyForURI("PYRO://"+sys.argv[1])
 
-print remote.hello()
+print "Ping:", remote.hello()
 
 # test pwm
 duty = 0.5
 print "setting pwm to duty:",duty,"... ",
-ratRemote.pwm_set_duty(duty)
+remote.pwm_set_duty(duty)
 print "done"
 
 print "enabling pwm... "
