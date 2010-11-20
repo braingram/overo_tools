@@ -6,7 +6,7 @@ import sys
 # you have to change the URI below to match your own host/port.
 remote = Pyro.core.getProxyForURI("PYRO://"+sys.argv[1])
 
-print "Ping:", remote.hello()
+print "Ping:", remote.ping()
 
 # test pwm
 duty = 0.5

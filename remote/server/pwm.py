@@ -118,6 +118,22 @@ class OmapPwm:
         pydevmem.write(self.TLDR_ADDR[self.pin], value)
     def set_match(self, value):
         pydevmem.write(self.TMAR_ADDR[self.pin], value)
+    def set_duty(self, value):
+        print "!!!!!!!!NOT YET IMPLEMENTED"
+
+class FakeOmapPwm(OmapPwm):
+    def __init__(self, pin=10):
+        if not pin in self.VALID_PINS:
+            raise Exception("invalid OmapPwm pin: "+str(pin)+" not in "+str(self.VALID_PINS))
+        self.pin = pin
+    def enable(self):
+        pass
+    def disable(self):
+        pass
+    def set_load(self, value):
+        pass
+    def set_match(self, value):
+        pass
 
 class TpsPwm:
     VALID_PINS = [0,1]

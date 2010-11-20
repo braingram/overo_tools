@@ -13,12 +13,12 @@ class Adc:
     DEVICE = '/dev/twl4030-madc'
     # 2.5 / 1024.0 = 0.00244140625
     SCALE = 0.00244140625
-    def __init__(self, pin=3,average=1):
+    def __init__(self, pin=3, average=1):
         self.dev = open(self.DEVICE, 'rw')
-        if not pin in self.VALID_PINS:
-            raise ValueError("Adc: invalid pin: "+str(pin)+" not in "+str(self.VALID_PINS))
-        if not average in (0,1):
-            raise ValueError("Adc: average("+str(average)+") must be 0 or 1")        
+        # if not pin in self.VALID_PINS:
+        #     raise ValueError("Adc: invalid pin: "+str(pin)+" not in "+str(self.VALID_PINS))
+        # if not average in (0,1):
+        #     raise ValueError("Adc: average("+str(average)+") must be 0 or 1")
         self.set_pin(pin,average)
         # disable carkit and allow madc inputs
         #i2cset -f -y 1 0x48 0xbb 0x08
@@ -34,6 +34,10 @@ class Adc:
         print "created adc for pin",pin
     def set_pin(self, pin, average):
         """Set the adc pin and average flag (0/1) for future reads [No error checking]"""
+        if not pin in self.VALID_PINS:
+            raise ValueError("Adc: invalid pin: "+str(pin)+" not in "+str(self.VALID_PINS))
+        if not average in (0,1):
+            raise ValueError("Adc: average("+str(average)+") must be 0 or 1")
         self.read_struct = struct.pack("iiiH", pin, average, 0, 0)
     def raw_read(self):
         """Returns the raw (unscaled) adc reading on pin defined in self.read_struct"""
@@ -60,3 +64,14 @@ class Adc:
         """Returns the adc voltage reading on pin. This call changes self.read_struct"""
         self.set_pin(pin,average)
         return self.read()
+
+class FakeAdc(Adc):
+    def __init__(self, pin=3, average=1):
+        self.set_pin(pin, average)
+    def set_pin(self, pin, average):
+        if not pin in self.VALID_PINS:
+            raise ValueError("Adc: invalid pin: "+str(pin)+" not in "+str(self.VALID_PINS))
+        if not average in (0,1):
+            raise ValueError("Adc: average("+str(average)+") must be 0 or 1")
+    def raw_read(self):
+        return 0.

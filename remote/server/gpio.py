@@ -57,3 +57,12 @@ class Gpio:
         self.set_output(0xffffffff)
     def set_low(self):
         self.set_output(0x00000000)
+
+class FakeGpio(Gpio):
+    def __init__(self, pin=146):
+        if not pin in self.VALID_PINS:
+            raise Exception("Gpio: invalid pin:"+str(pin)+" not in "+str(self.VALID_PINS))
+        self.pin = pin
+        self.output = 0x00000000
+    def set_output(self, level):
+        self.output = level

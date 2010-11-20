@@ -4,17 +4,24 @@ import os
 
 import Pyro.core # Pyro 3.8.1
 
-import pwm
-import adc
-import gpio
+fakeIO = True
+
+if fakeIO:
+    from pwm import FakeOmapPwm as Pwm
+    from adc import FakeAdc as Adc
+    from gpio import FakeGpio as Gpio
+else:
+    from pwm import OmapPwm as Pwm
+    from adc import Adc as Adc
+    from gpio import Gpio as Gpio
 
 class Remote(Pyro.core.ObjBase): 
     """Creates a pretty useless class that just contains an adc (self.adc) and pwm (self.pwm)"""
     def __init__(self):
         Pyro.core.ObjBase.__init__(self)
-        self.adc = adc.Adc()
-        self.pwm = pwm.OmapPwm()
-        self.gpio = gpio.Gpio()
+        self.adc = Adc()#adc.Adc()
+        self.pwm = Pwm()#pwm.OmapPwm()
+        self.gpio = Gpio()#gpio.Gpio()
     def ping(self):
         return 1
     # pwm
